@@ -10,21 +10,23 @@
 // Example: greet("Alex", 15) should return "Hello, Alex! You are 15 years old."
 const greet = (name, age) => {
   // Your code here
+  return ("Hello, " + name + " You are " + age + " years old.");
 };
 
+greet("Ted", 14);
 // ========================================
 // 2. Basic Math Functions
 // ========================================
 
 // TODO: Create a function that calculates the area of a rectangle
 const calculateArea = (width, height) => {
-  // Your code here
+  return (width * height)
 };
 
 // TODO: Create a function that converts Fahrenheit to Celsius
 // Formula: (fahrenheit - 32) * 5/9
 const fahrenheitToCelsius = (fahrenheit) => {
-  // Your code here
+  return ((fahrenheit - 32) * 5/9);
 };
 
 // ========================================
@@ -34,18 +36,42 @@ const fahrenheitToCelsius = (fahrenheit) => {
 // TODO: Create a function that returns the letter grade for a percentage
 // 90-100: 'A', 80-89: 'B', 70-79: 'C', 60-69: 'D', below 60: 'F'
 const getLetterGrade = (percentage) => {
-  // Your code here
+  if(percentage > 90) {
+    return 'A';
+  }
+  else if(percentage > 80) {
+    return 'B';
+  }
+  else if(percentage > 70) {
+    return 'C';
+  }
+  else if(percentage > 60) {
+    return 'D';
+  }
+  else{
+    return 'F';
+  }
 };
 
 // TODO: Create a function that checks if a number is even or odd
 // Return "even" or "odd"
 const evenOrOdd = (number) => {
-  // Your code here
+  if(number % 2 == 0) {
+    return "even";
+  }
+  else{
+    return "odd";
+  }
 };
 
 // TODO: Create a function that returns the larger of two numbers
 const max = (a, b) => {
-  // Your code here
+  if(a > b) {
+    return a;
+  }
+  else{
+    return b;
+  }
 };
 
 // ========================================
@@ -54,7 +80,10 @@ const max = (a, b) => {
 
 // TODO: Create a function that returns the sum of all numbers in an array
 const sumArray = (numbers) => {
-  // Your code here
+  
+  for(const number of numbers) {
+    
+  }
 };
 
 // TODO: Create a function that returns the count of positive numbers in an array
