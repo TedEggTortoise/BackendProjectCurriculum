@@ -5,9 +5,10 @@ Follow the instructions in README.md to practice Git commands with this file.
 ## Instructions
 
 1. Add your name below:
-Name:
+Name: Ted Shi
 
 2. Add your favorite programming language:
-Favorite Language:
+Favorite Language: C++
 
 3. Commit your changes with descriptive messages!
+In lines 8 and 11, I added my name and favorite language
