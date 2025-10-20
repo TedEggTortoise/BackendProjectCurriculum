@@ -28,19 +28,25 @@ const products = [
 // TODO: Use map to double all numbers
 // Expected: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
 const doubleNumbers = (nums) => {
-  // Your code here
+  return nums.map((num) => {
+    return num * 2;
+  });
 };
 
 // TODO: Use map to get just the student names
 // Expected: ['Alex', 'Jordan', 'Casey', 'Taylor', 'Morgan']
 const getStudentNames = (students) => {
-  // Your code here
+  return students.map((student) => {
+    return student.name;
+  });
 };
 
 // TODO: Use map to add 5 bonus points to each grade
 // Return an array of objects with updated grades
 const addBonusPoints = (students) => {
-  // Your code here
+  return students.map((student) => {
+    return student.grade + 5;
+  });
 };
 
 // ========================================
@@ -50,22 +56,30 @@ const addBonusPoints = (students) => {
 // TODO: Use filter to get only even numbers
 // Expected: [2, 4, 6, 8, 10]
 const getEvenNumbers = (nums) => {
-  // Your code here
+  return nums.filter((num) => {
+    return num % 2 === 0;
+  });
 };
 
 // TODO: Use filter to get only passing students (passed === true)
 const getPassingStudents = (students) => {
-  // Your code here
+  return students.filter((student) => {
+    return student.passed === true;
+  });
 };
 
 // TODO: Use filter to get only products in stock
 const getInStockProducts = (products) => {
-  // Your code here
+  return products.filter((product) => {
+    return product.inStock === true;
+  });
 };
 
 // TODO: Use filter to get students with grade >= 80
 const getHighGrades = (students) => {
-  // Your code here
+  return students.filter((student) => {
+    return student.grade >= 80;
+  });
 };
 
 // ========================================
@@ -75,23 +89,37 @@ const getHighGrades = (students) => {
 // TODO: Use reduce to sum all numbers
 // Expected: 55 (1+2+3+...+10)
 const sumNumbers = (nums) => {
-  // Your code here
+  return nums.reduce((sum, num) => {
+    return sum + num;
+  }, 0);
 };
 
 // TODO: Use reduce to find the maximum number
 const findMax = (nums) => {
-  // Your code here
+  return nums.reduce((maximum, num) => {
+    if (num > maximum) {
+      return num;
+    } else {
+      return maximum;
+    }
+  }, nums[0]);
 };
 
 // TODO: Use reduce to count how many students passed
 // Expected: 4
 const countPassing = (students) => {
-  // Your code here
+  return students.reduce((passed, student) => {
+    if (student.passed) {
+      return passed + 1;
+    } else {
+      return passed;
+    }
+  }, 0);
 };
 
 // TODO: Use reduce to calculate the total price of all products
 const calculateTotalPrice = (products) => {
-  // Your code here
+  return products.reduce((total, product) => total + product.price, 0);
 };
 
 // ========================================
@@ -100,17 +128,17 @@ const calculateTotalPrice = (products) => {
 
 // TODO: Use find to get the first number greater than 5
 const findFirstLarge = (nums) => {
-  // Your code here
+  return nums.find((num) => num > 5);
 };
 
 // TODO: Use find to get the student named 'Jordan'
 const findJordan = (students) => {
-  // Your code here
+  return students.find((student) => student.name === 'Jordan');
 };
 
 // TODO: Use find to get the first product that costs more than $50
 const findExpensiveProduct = (products) => {
-  // Your code here
+  return products.find((product) => product.price > 50);
 };
 
 // ========================================
@@ -120,19 +148,25 @@ const findExpensiveProduct = (products) => {
 // TODO: Get the average grade of all passing students
 // Hint: filter passing students, map to get grades, reduce to sum, then divide
 const averagePassingGrade = (students) => {
-  // Your code here
+  let passedStudents = students.filter((student) => student.passed);
+  let total = passedStudents.map((student) => student.grade).reduce((sum, grade) => sum + grade, 0);
+  return total / passedStudents.length;
 };
 
 // TODO: Get total price of all in-stock sports products
 // Hint: filter by category and inStock, then reduce to sum prices
 const totalSportsInStock = (products) => {
-  // Your code here
+  return products
+    .filter((product) => product.inStock)
+    .reduce((sum, product) => sum + product.price, 0);
 };
 
 // TODO: Get names of students under 16 years old who passed
 // Hint: filter by age and passed, then map to get names
 const youngPassingStudents = (students) => {
-  // Your code here
+  return students
+    .filter((student) => student.age < 16 && student.passed)
+    .map((student) => student.name);
 };
 
 // ========================================
@@ -142,26 +176,27 @@ const youngPassingStudents = (students) => {
 // TODO: Use some() to check if any student failed
 // Return true or false
 const anyFailed = (students) => {
-  // Your code here
+  return students.some((student) => !student.passed);
 };
 
 // TODO: Use every() to check if all products are in stock
 // Return true or false
 const allInStock = (products) => {
-  // Your code here
+  return products.every((product) => product.inStock);
 };
 
 // TODO: Sort products by price (ascending)
 // Return a new sorted array (don't modify original)
 const sortByPrice = (products) => {
-  // Your code here
+  let newProducts = products.map((product) => product);
+  newProducts.sort((left, right) => left.price - right.price);
+  return newProducts;
 };
 
 // ========================================
 // TEST YOUR FUNCTIONS
 // ========================================
 
-/*
 console.log('=== MAP ===');
 console.log('Double numbers:', doubleNumbers(numbers));
 console.log('Student names:', getStudentNames(students));
@@ -193,4 +228,6 @@ console.log('\n=== BONUS ===');
 console.log('Any failed:', anyFailed(students));
 console.log('All in stock:', allInStock(products));
 console.log('Sorted by price:', sortByPrice(products));
-*/
+for (const product of sortByPrice(products)) {
+  console.log(product);
+}
