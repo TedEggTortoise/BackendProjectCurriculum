@@ -28,19 +28,19 @@ const products = [
 // TODO: Use map to double all numbers
 // Expected: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
 const doubleNumbers = (nums) => {
-  // Your code here
+  nums.map(num => num * 2);
 };
 
 // TODO: Use map to get just the student names
 // Expected: ['Alex', 'Jordan', 'Casey', 'Taylor', 'Morgan']
 const getStudentNames = (students) => {
-  // Your code here
+  students.map(student => student.name);
 };
 
 // TODO: Use map to add 5 bonus points to each grade
 // Return an array of objects with updated grades
 const addBonusPoints = (students) => {
-  // Your code here
+  students.map(student => student.grade += 5);
 };
 
 // ========================================
@@ -50,17 +50,17 @@ const addBonusPoints = (students) => {
 // TODO: Use filter to get only even numbers
 // Expected: [2, 4, 6, 8, 10]
 const getEvenNumbers = (nums) => {
-  // Your code here
+  nums.filter(num => num % 2 === 0);
 };
 
 // TODO: Use filter to get only passing students (passed === true)
 const getPassingStudents = (students) => {
-  // Your code here
+  students.filter(student => student.passed);
 };
 
 // TODO: Use filter to get only products in stock
 const getInStockProducts = (products) => {
-  // Your code here
+  products.filter(product => product.inStock);
 };
 
 // TODO: Use filter to get students with grade >= 80
@@ -100,12 +100,12 @@ const calculateTotalPrice = (products) => {
 
 // TODO: Use find to get the first number greater than 5
 const findFirstLarge = (nums) => {
-  // Your code here
+  nums.find(num => num > 5);
 };
 
 // TODO: Use find to get the student named 'Jordan'
 const findJordan = (students) => {
-  // Your code here
+  students.find(student => student.name === 'Jordan');
 };
 
 // TODO: Use find to get the first product that costs more than $50

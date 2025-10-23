@@ -12,7 +12,12 @@ const fs = require('fs');
 // Example: createStudent("Maya", 14, "soccer", "beginner")
 // Returns: { name: "Maya", age: 14, sport: "soccer", level: "beginner" }
 const createStudent = (name, age, sport, level) => {
-  // Your code here
+  return {
+    name: name,
+    age: age,
+    sport: sport,
+    level: level
+  }
 };
 
 // TODO: Create a function that gets a student's full info as a string
