@@ -28,8 +28,18 @@ async function loadTodos() {
   // 3. Return the parsed array
   // 4. Handle the case where the file doesn't exist (return empty array)
   // Hint: You can use try/catch to handle file not found errors
+  try {
+    const jsonString = await fs.readFile(DATA_FILE);
+    const jsonArray = JSON.parse(jsonString);
+    return jsonArray;
+  } catch (error) {
+    if (error.code === 'ENOENT') {
+      return [];
+    }
 
-  return []; // Placeholder - replace with your implementation
+    console.error('Error loading todos:', error.message);
+    return [];
+  }
 }
 
 /**
@@ -41,9 +51,15 @@ async function saveTodos(todos) {
   // TODO: Implement saving todos to DATA_FILE
   // 1. Convert the todos array to JSON string with pretty formatting
   //    Use JSON.stringify(todos, null, 2) for readable output
-  // 2. Write the JSON string to DATA_FILE using fs.promises.writeFile()
-  // Hint: Make sure to await the writeFile call
+  const jsonString = JSON.stringify(todos, null, 2);
 
+  // 2. Write the JSON string to DATA_FILE using fs.promises.writeFile()
+  try {
+    await fs.writeFile(DATA_FILE, jsonString);
+  } catch (error) {
+    console.error('Error saving todos:', error.message);
+  }
+  // Hint: Make sure to await the writeFile call
   // Placeholder - add your implementation here
 }
 
@@ -55,11 +71,18 @@ async function saveTodos(todos) {
 function generateId(todos) {
   // TODO: Implement ID generation
   // 1. If todos array is empty, return 1
-  // 2. Otherwise, find the maximum ID in the existing todos
-  // 3. Return max ID + 1
-  // Hint: Use Math.max() with map() to find the highest ID
+  if (todos.length === 0) {
+    return 1;
+  }
 
-  return 1; // Placeholder - replace with your implementation
+  // 2. Otherwise, find the maximum ID in the existing todos
+  const maxID = todos.reduce((max, todo) => {
+    return Math.max(max, todo.id);
+  }, 0);
+
+  // 3. Return max ID + 1
+  return maxID + 1;
+  // Hint: Use Math.max() with map() to find the highest ID
 }
 
 /**
@@ -77,8 +100,26 @@ async function listTodos(filter = 'all') {
   //    Example: "[1] Buy groceries (active) - Created: 2025-01-15"
   // 4. If no todos match, display a helpful message
 
-  console.log('Todo list (placeholder):');
-  console.log('- Implement the listTodos function');
+  const todos = await loadTodos();
+
+  let filteredTodos = null;
+  if (filter === 'all') {
+    filteredTodos = todos;
+  } else if (filter === 'active') {
+    filteredTodos = todos.filter((todo) => todo.status === 'active');
+  } else if (filter === 'completed') {
+    filteredTodos = todos.filter((todo) => todo.status === 'completed');
+  } else {
+    console.log('node index.js list [all|active|completed]  - List todos');
+    return;
+  }
+
+  let index = 1;
+  for (todo of filteredTodos) {
+    const date = new Date(todo.createdAt).toISOString().slice(0, 10);
+    console.log(`[${index}] ${todo.title} (${todo.status}) - Created: ${date}`);
+    index++;
+  }
 }
 
 /**
@@ -89,18 +130,34 @@ async function addTodo(title) {
   // TODO: Implement adding a todo
   // 1. Validate that title is provided and not empty
   //    If invalid, display an error and return
+  if (title === null || title === undefined || title.trim() === '') {
+    console.log('node index.js add "Todo title" - Add a new todo');
+    return;
+  }
+
   // 2. Load existing todos
+  let todos = await loadTodos();
+
   // 3. Create a new todo object with:
   //    - id: generated using generateId()
   //    - title: the provided title (trimmed)
   //    - status: 'active'
   //    - createdAt: current timestamp (use new Date().toISOString())
-  // 4. Add the new todo to the array
-  // 5. Save the updated todos array
-  // 6. Display a success message with the new todo's ID
+  let todo = {
+    id: generateId(todos),
+    title: title.trim(),
+    status: 'active',
+    createdAt: new Date().toISOString(),
+  };
 
-  console.log('Add todo (placeholder): ' + title);
-  console.log('- Implement the addTodo function');
+  // 4. Add the new todo to the array
+  todos.push(todo);
+
+  // 5. Save the updated todos array
+  saveTodos(todos);
+
+  // 6. Display a success message with the new todo's ID
+  console.log(`Success - Todo ID = ${todo.id}`);
 }
 
 /**
@@ -110,15 +167,31 @@ async function addTodo(title) {
 async function completeTodo(id) {
   // TODO: Implement completing a todo
   // 1. Parse the id to a number
+  const todoID = parseInt(id, 10);
+  if (isNaN(todoID)) {
+    console.error('Invalid ID', id);
+    return;
+  }
+
   // 2. Load existing todos
+  const todos = await loadTodos();
+
   // 3. Find the todo with the matching ID
   //    If not found, display an error and return
-  // 4. Update the todo's status to 'completed'
-  // 5. Save the updated todos array
-  // 6. Display a success message
+  const finds = todos.filter((todo) => todo.id === todoID);
+  if (finds.length === 0) {
+    console.log('Did not find todo with ID', id);
+    return;
+  }
 
-  console.log('Complete todo (placeholder): ' + id);
-  console.log('- Implement the completeTodo function');
+  // 4. Update the todo's status to 'completed'
+  finds[0].status = 'completed';
+
+  // 5. Save the updated todos array
+  await saveTodos(todos);
+
+  // 6. Display a success message
+  console.log('Success - Completed Todo with ID: ', id);
 }
 
 /**
@@ -128,16 +201,32 @@ async function completeTodo(id) {
 async function deleteTodo(id) {
   // TODO: Implement deleting a todo
   // 1. Parse the id to a number
+  const todoID = parseInt(id, 10);
+  if (isNaN(todoID)) {
+    console.error('Invalid ID', id);
+    return;
+  }
+
   // 2. Load existing todos
+  let todos = await loadTodos();
+
   // 3. Find the index of the todo with the matching ID
   //    If not found, display an error and return
+  const finds = todos.filter((todo) => todo.id === todoID);
+  if (finds.length === 0) {
+    console.log('Did not find todo with ID', id);
+    return;
+  }
+
   // 4. Remove the todo from the array
   //    Hint: Use array.splice() or array.filter()
-  // 5. Save the updated todos array
-  // 6. Display a success message
+  todos = todos.filter((todo) => todo.id != id);
 
-  console.log('Delete todo (placeholder): ' + id);
-  console.log('- Implement the deleteTodo function');
+  // 5. Save the updated todos array
+  await saveTodos(todos);
+
+  // 6. Display a success message
+  console.log('Success - Deleted Todo with ID: ', id);
 }
 
 /**
@@ -146,7 +235,7 @@ async function deleteTodo(id) {
 async function main() {
   // Parse command line arguments
   // process.argv contains: [node_path, script_path, command, ...args]
-  const [,, command, ...args] = process.argv;
+  const [, , command, ...args] = process.argv;
 
   try {
     // Route to the appropriate command handler
