@@ -10,6 +10,7 @@ Convert the JavaScript task manager from Module 2 to TypeScript by adding compre
 ## Learning Objectives
 
 By completing this homework, you will:
+
 - Convert a complete JavaScript application to TypeScript
 - Define interfaces for data structures
 - Add type annotations to all functions
@@ -39,6 +40,7 @@ By completing this homework, you will:
 ### File Requirements
 
 Your homework should include:
+
 - `types.ts` - Interface definitions
 - `index.ts` - Main application logic with type annotations
 - `tsconfig.json` - TypeScript configuration (provided)
@@ -47,11 +49,13 @@ Your homework should include:
 ## Getting Started
 
 1. Navigate to the homework folder:
+
 ```bash
 cd module-03-typescript-basics/homework/starter
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
@@ -77,26 +81,31 @@ homework/
 ## Running Your Code
 
 ### Compile TypeScript
+
 ```bash
 npm run build
 ```
 
 ### Run the compiled code
+
 ```bash
 npm start
 ```
 
 ### Compile and run in one step
+
 ```bash
 npm run dev
 ```
 
 ### Run tests
+
 ```bash
 npm test
 ```
 
 Or run just the Module 3 tests:
+
 ```bash
 npm run test:module-03
 ```
@@ -172,7 +181,7 @@ import { Task, TaskManager } from './types';
 
 const manager: TaskManager = {
   tasks: [],
-  nextId: 1
+  nextId: 1,
 };
 
 function createTask(title: string): Task {
@@ -180,7 +189,7 @@ function createTask(title: string): Task {
     id: manager.nextId++,
     title,
     completed: false,
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
   };
   manager.tasks.push(task);
   return task;
@@ -223,7 +232,7 @@ When a function might not find something, use union types:
 
 ```typescript
 function findTask(id: number): Task | null {
-  return tasks.find(t => t.id === id) || null;
+  return tasks.find((t) => t.id === id) || null;
 }
 ```
 
@@ -280,8 +289,25 @@ If you're stuck:
 ## What's Next?
 
 After completing this homework:
+
 - Make sure all tests pass
 - Review any areas you found challenging
 - Move on to [Module 04: HTTP & REST APIs](../../module-04-http-rest-apis/README.md)
 
 Good luck! Remember, the goal is to understand how TypeScript improves code quality, not just to make the tests pass.
+
+## Node Commands
+
+```
+npm install -g ts-node
+ts-node index.ts
+
+# Compile TypeScript to JavaScript
+tsc index.ts
+
+# Run the compiled JavaScript
+node index.js
+
+npm install -g tsx
+tsx index.ts
+```
