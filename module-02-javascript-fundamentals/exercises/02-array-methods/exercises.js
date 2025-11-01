@@ -28,25 +28,19 @@ const products = [
 // TODO: Use map to double all numbers
 // Expected: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
 const doubleNumbers = (nums) => {
-  return nums.map((num) => {
-    return num * 2;
-  });
+  nums.map(num => num * 2);
 };
 
 // TODO: Use map to get just the student names
 // Expected: ['Alex', 'Jordan', 'Casey', 'Taylor', 'Morgan']
 const getStudentNames = (students) => {
-  return students.map((student) => {
-    return student.name;
-  });
+  students.map(student => student.name);
 };
 
 // TODO: Use map to add 5 bonus points to each grade
 // Return an array of objects with updated grades
 const addBonusPoints = (students) => {
-  return students.map((student) => {
-    return student.grade + 5;
-  });
+  students.map(student => student.grade += 5);
 };
 
 // ========================================
@@ -56,20 +50,17 @@ const addBonusPoints = (students) => {
 // TODO: Use filter to get only even numbers
 // Expected: [2, 4, 6, 8, 10]
 const getEvenNumbers = (nums) => {
-  return nums.filter((num) => {
-    return num % 2 === 0;
-  });
+  nums.filter(num => num % 2 === 0);
 };
 
 // TODO: Use filter to get only passing students (passed === true)
 const getPassingStudents = (students) => {
-  return students.filter((student) => {
-    return student.passed === true;
-  });
+  students.filter(student => student.passed);
 };
 
 // TODO: Use filter to get only products in stock
 const getInStockProducts = (products) => {
+  products.filter(product => product.inStock);
   return products.filter((product) => {
     return product.inStock === true;
   });
