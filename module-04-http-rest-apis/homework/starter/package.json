@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Weather API client homework for Module 04",
   "main": "index.ts",
+  "type": "module",
   "scripts": {
     "start": "ts-node index.ts",
     "test": "echo \"Run tests from root: npm run test:module-04\""

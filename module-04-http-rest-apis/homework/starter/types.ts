@@ -16,6 +16,11 @@
 // }
 export interface CurrentWeather {
   // TODO: Add properties for temperature, windspeed, winddirection, weathercode, and time
+  temperature: number;
+  windspeed: number;
+  winddirection: number;
+  weathercode: number;
+  time: string;
 }
 
 // TODO: Define the DailyForecast interface
@@ -35,6 +40,9 @@ export interface DailyForecast {
   time: string[]; // Array of dates like "2025-01-15"
   // TODO: Add properties for temperature_2m_max, temperature_2m_min, and precipitation_sum
   // These are all arrays of numbers
+  temperature_2m_max: number[];
+  temperature_2m_min: number[];
+  precipitation_sum: number[];
 }
 
 // TODO: Define the WeatherForecast interface
@@ -42,6 +50,7 @@ export interface DailyForecast {
 // It should contain the daily forecast data
 export interface WeatherForecast {
   // TODO: Add a daily property of type DailyForecast
+  daily: DailyForecast;
 }
 
 // TODO: Define the City interface
@@ -64,6 +73,13 @@ export interface WeatherForecast {
 export interface City {
   // TODO: Add properties for name, latitude, longitude, and country
   // Also add admin1 (state/region) and id (both optional)
+
+  name: string;
+  latitude: number;
+  longitude: number;
+  country: string;
+  admin1?: string;
+  id?: number;
 }
 
 // Internal API response types (for parsing API responses)

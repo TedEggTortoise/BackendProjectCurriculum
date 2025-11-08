@@ -36,7 +36,19 @@ class WeatherClient {
     // 5. Return the parsed data
     //
     // Hint: Use async/await and try/catch for error handling
-    throw new Error('Not implemented');
+
+    try {
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(`Error with status ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data as T;
+    } catch (error) {
+      throw new Error('An error occurred');
+    }
   }
 
   /**
@@ -45,10 +57,7 @@ class WeatherClient {
    * @param longitude - Longitude of the location (-180 to 180)
    * @returns Current weather data
    */
-  async getCurrentWeather(
-    latitude: number,
-    longitude: number
-  ): Promise<CurrentWeather> {
+  async getCurrentWeather(latitude: number, longitude: number): Promise<CurrentWeather> {
     // TODO: Implement getCurrentWeather
     // 1. Validate latitude is between -90 and 90
     // 2. Validate longitude is between -180 and 180
@@ -62,10 +71,19 @@ class WeatherClient {
     // Example URL: https://api.open-meteo.com/v1/forecast?latitude=40.71&longitude=-74.01&current_weather=true
     //
     // Hint: Use URLSearchParams to build query parameters
-    throw new Error('Not implemented');
+    if (latitude < -90 || latitude > 90) {
+      throw new Error('latitude is not between -90 and 90');
+    }
+    if (longitude < -180 || longitude > 180) {
+      throw new Error('longitude is not between -180 and 180');
+    }
+
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`;
+    const data = await this.request<CurrentWeatherResponse>(url);
+    return data.current_weather;
   }
 
-  /**
+  /**3
    * Get weather forecast for a location
    * @param latitude - Latitude of the location (-90 to 90)
    * @param longitude - Longitude of the location (-180 to 180)
@@ -75,7 +93,7 @@ class WeatherClient {
   async getWeatherForecast(
     latitude: number,
     longitude: number,
-    days: number = 7
+    days: number = 7,
   ): Promise<WeatherForecast> {
     // TODO: Implement getWeatherForecast
     // 1. Validate latitude is between -90 and 90
@@ -91,7 +109,25 @@ class WeatherClient {
     // 6. Return the forecast data
     //
     // Example URL: https://api.open-meteo.com/v1/forecast?latitude=40.71&longitude=-74.01&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&forecast_days=7&timezone=auto
-    throw new Error('Not implemented');
+    if (latitude < -90 || latitude > 90) {
+      throw new Error(`latitude ${latitude} is not between -90 and 90`);
+    }
+
+    if (longitude < -180 || longitude > 180) {
+      throw new Error(`longitude ${longitude} is not between -180 and 180`);
+    }
+
+    if (days < 1 || days > 16) {
+      throw new Error(`Days ${days} is not between 1 and 16`);
+    }
+
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude.toFixed(2)}&longitude=${longitude.toFixed(2)}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&forecast_days=${days}&timezone=auto`;
+
+    // const url =
+    //   'https://api.open-meteo.com/v1/forecast?latitude=40.71&longitude=-74.01&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&forecast_days=7&timezone=auto';
+
+    const response = await this.request<ForecastResponse>(url);
+    return response;
   }
 
   /**
@@ -113,7 +149,27 @@ class WeatherClient {
     // Example URL: https://geocoding-api.open-meteo.com/v1/search?name=New%20York&count=1
     //
     // Hint: URL-encode the city name using encodeURIComponent()
-    throw new Error('Not implemented');
+
+    if (!cityName) {
+      throw new Error('String is empty');
+    }
+
+    const url = `https://geocoding-api.open-meteo.com/v1/search?name=${cityName}&count=1`;
+    const response = await this.request<GeocodingResponse>(url);
+
+    if (response.results && response.results.length > 0) {
+      const city = response.results[0];
+      return {
+        name: city.name,
+        latitude: city.latitude,
+        longitude: city.longitude,
+        country: city.country,
+        admin1: city.admin1,
+        id: city.id,
+      };
+    }
+
+    return null;
   }
 }
 
@@ -144,7 +200,7 @@ async function main() {
         `  ${forecast.daily.time[i]}: ` +
           `Max ${forecast.daily.temperature_2m_max[i]}°C, ` +
           `Min ${forecast.daily.temperature_2m_min[i]}°C, ` +
-          `Precipitation: ${forecast.daily.precipitation_sum[i]}mm`
+          `Precipitation: ${forecast.daily.precipitation_sum[i]}mm`,
       );
     }
   } catch (error) {
@@ -180,10 +236,7 @@ async function main() {
     const paris = await client.searchCity('Paris');
     if (paris) {
       console.log(`\nWeather for ${paris.name}, ${paris.country}:`);
-      const weather = await client.getCurrentWeather(
-        paris.latitude,
-        paris.longitude
-      );
+      const weather = await client.getCurrentWeather(paris.latitude, paris.longitude);
       console.log(`  Temperature: ${weather.temperature}°C`);
       console.log(`  Wind Speed: ${weather.windspeed} km/h`);
     }
